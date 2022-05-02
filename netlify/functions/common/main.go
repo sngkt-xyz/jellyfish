@@ -3,8 +3,6 @@ package main
 import (
 	"net/http"
 
-	"jellyfish/internal/libraries"
-
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -18,7 +16,7 @@ func main() {
 		return c.JSON(http.StatusOK, "hey")
 	})
 
-	server := libraries.Route(e)
+	server := Route(e)
 
 	lambda.Start(server)
 }
