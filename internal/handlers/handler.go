@@ -30,5 +30,9 @@ func NewRoute(echo libraries.Echo, handler Handler) Route {
 
 func (r *route) Setup() {
 	fmt.Println("Setup")
-	r.echo.Echo.GET("/health", r.handler.HealthCheck)
+	netlify := r.echo.Echo.Group("/.netlify/functions/v1")
+	{
+		netlify.GET("/health", r.handler.HealthCheck)
+
+	}
 }
