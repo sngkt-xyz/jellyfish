@@ -1,6 +1,7 @@
 package libraries
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -24,12 +25,19 @@ func formatAPIResponse(statusCode int, headers http.Header, responseData string)
 
 	responseHeaders["Access-Control-Allow-Origin"] = "*"
 	responseHeaders["Access-Control-Allow-Headers"] = "origin,Accept,Authorization,Content-Type"
-
+	fmt.Println("add log")
+	// return &events.APIGatewayProxyResponse{
+	// 	Body:            responseData,
+	// 	Headers:         responseHeaders,
+	// 	StatusCode:      statusCode,
+	// 	IsBase64Encoded: false,
+	// }, nil
 	return &events.APIGatewayProxyResponse{
-		Body:            responseData,
-		Headers:         responseHeaders,
-		StatusCode:      statusCode,
-		IsBase64Encoded: false,
+		StatusCode:        200,
+		Headers:           map[string]string{"Content-Type": "text/plain"},
+		MultiValueHeaders: http.Header{"Set-Cookie": {"Ding", "Ping"}},
+		Body:              "Hello, World!",
+		IsBase64Encoded:   false,
 	}, nil
 }
 
