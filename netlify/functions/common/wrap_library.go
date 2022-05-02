@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -35,21 +36,23 @@ func formatAPIResponse(statusCode int, headers http.Header, responseData string)
 // Route wraps echo server into Lambda Handler
 func Route(e *echo.Echo) func(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
 	return func(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
+		fmt.Println(request.Path)
 		body := strings.NewReader(request.Body)
 		req := httptest.NewRequest(request.HTTPMethod, request.Path, body)
 		for k, v := range request.Headers {
 			req.Header.Add(k, v)
 		}
 
+		fmt.Println("some log 0")
 		q := req.URL.Query()
 		for k, v := range request.QueryStringParameters {
 			q.Add(k, v)
 		}
 		req.URL.RawQuery = q.Encode()
-
+		fmt.Println("some log 1")
 		rec := httptest.NewRecorder()
 		e.ServeHTTP(rec, req)
-
+		fmt.Println("some log 2")
 		res := rec.Result()
 		responseBody, err := ioutil.ReadAll(res.Body)
 		if err != nil {
