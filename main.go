@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"jellyfish/internal"
 	"jellyfish/internal/handlers"
 	"jellyfish/internal/libraries"
+	"os"
 
-	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/joho/godotenv"
 	"go.uber.org/fx"
 )
@@ -20,12 +21,20 @@ func bootstrap(
 		fx.Hook{
 			OnStart: func(ctx context.Context) error {
 				go func() {
+					port, found := os.LookupEnv("PORT")
+
+					if !found {
+						port = "1323"
+					}
+
 					// echo.Echo.Validator = validator
 					// echo.Echo.HTTPErrorHandler = libraries.ErrorHandler
 
 					route.Setup()
-					server := libraries.Route(echo.Echo)
-					lambda.Start(server)
+
+					echo.Echo.Logger.Fatal(
+						echo.Echo.Start(fmt.Sprintf(":%s", port)),
+					)
 				}()
 
 				return nil
