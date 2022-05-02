@@ -14,7 +14,7 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 
-	e.GET("/hey", func(c echo.Context) error {
+	e.GET("", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, "hey")
 	})
 
