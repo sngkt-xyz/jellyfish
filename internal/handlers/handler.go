@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"jellyfish/internal/libraries"
 
 	"go.uber.org/fx"
@@ -28,5 +29,6 @@ func NewRoute(echo libraries.Echo, handler Handler) Route {
 }
 
 func (r *route) Setup() {
+	fmt.Println("Setup")
 	r.echo.Echo.GET("/health", r.handler.HealthCheck)
 }
