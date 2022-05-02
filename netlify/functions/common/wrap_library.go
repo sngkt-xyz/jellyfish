@@ -30,9 +30,11 @@ func formatAPIResponse(statusCode int, headers http.Header, responseData string)
 
 	fmt.Println("some log 8")
 	return &events.APIGatewayProxyResponse{
-		Body:       responseData,
-		Headers:    responseHeaders,
-		StatusCode: statusCode,
+		StatusCode:        200,
+		Headers:           map[string]string{"Content-Type": "text/plain"},
+		MultiValueHeaders: http.Header{"Set-Cookie": {"Ding", "Ping"}},
+		Body:              "Hello, World!",
+		IsBase64Encoded:   false,
 	}, nil
 }
 
