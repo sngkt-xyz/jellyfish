@@ -11,8 +11,8 @@ type Any interface{}
 type Response struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
-	Data    Any    `json:"data"`
-	Error   string `json:"error"`
+	Data    Any    `json:"data,omitempty"`
+	Error   string `json:"error,omitempty"`
 }
 
 func NewResponse(code int, message string, content Any) Response {
