@@ -1,7 +1,6 @@
 package libraries
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -25,19 +24,12 @@ func formatAPIResponse(statusCode int, headers http.Header, responseData string)
 
 	responseHeaders["Access-Control-Allow-Origin"] = "*"
 	responseHeaders["Access-Control-Allow-Headers"] = "origin,Accept,Authorization,Content-Type"
-	fmt.Println("add log", responseData)
-	// return &events.APIGatewayProxyResponse{
-	// 	Body:            responseData,
-	// 	Headers:         responseHeaders,
-	// 	StatusCode:      statusCode,
-	// 	IsBase64Encoded: false,
-	// }, nil
+
 	return &events.APIGatewayProxyResponse{
-		StatusCode:        200,
-		Headers:           map[string]string{"Content-Type": "text/plain"},
-		MultiValueHeaders: http.Header{"Set-Cookie": {"Ding", "Ping"}},
-		Body:              "Hello, World!",
-		IsBase64Encoded:   false,
+		Body:            responseData,
+		Headers:         responseHeaders,
+		StatusCode:      statusCode,
+		IsBase64Encoded: false,
 	}, nil
 }
 
@@ -61,7 +53,6 @@ func Route(e *echo.Echo) func(request events.APIGatewayProxyRequest) (*events.AP
 
 		res := rec.Result()
 		responseBody, err := ioutil.ReadAll(res.Body)
-		fmt.Println(res)
 
 		if err != nil {
 			return formatAPIResponse(http.StatusInternalServerError, res.Header, err.Error())

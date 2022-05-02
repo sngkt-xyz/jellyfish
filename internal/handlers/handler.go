@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"jellyfish/internal/libraries"
 
 	"go.uber.org/fx"
@@ -29,10 +28,8 @@ func NewRoute(echo libraries.Echo, handler Handler) Route {
 }
 
 func (r *route) Setup() {
-	fmt.Println("Setup")
 	netlify := r.echo.Echo.Group("/.netlify/functions/v1")
 	{
 		netlify.GET("/health", r.handler.HealthCheck)
-
 	}
 }

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"jellyfish/internal/constants"
 	"jellyfish/internal/models"
 	"net/http"
@@ -20,7 +19,6 @@ func NewHandler() Handler {
 }
 
 func (h *handler) HealthCheck(c echo.Context) error {
-	fmt.Println("HealthCheck")
 	return c.JSON(http.StatusOK, models.NewResponse(http.StatusOK, constants.SuccessHealthCheck, models.HealthCheckResponse{
 		Status: "OK",
 	}))
