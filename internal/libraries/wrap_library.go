@@ -1,7 +1,6 @@
 package libraries
 
 import (
-	"context"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -11,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func formatAPIResponse(statusCode int, headers http.Header, responseData string) (events.APIGatewayProxyResponse, error) {
+func formatAPIResponse(statusCode int, headers http.Header, responseData string) (*events.APIGatewayProxyResponse, error) {
 	responseHeaders := make(map[string]string)
 
 	responseHeaders["Content-Type"] = "application/json"
@@ -26,7 +25,7 @@ func formatAPIResponse(statusCode int, headers http.Header, responseData string)
 	responseHeaders["Access-Control-Allow-Origin"] = "*"
 	responseHeaders["Access-Control-Allow-Headers"] = "origin,Accept,Authorization,Content-Type"
 
-	return events.APIGatewayProxyResponse{
+	return &events.APIGatewayProxyResponse{
 		Body:       responseData,
 		Headers:    responseHeaders,
 		StatusCode: statusCode,
@@ -34,8 +33,8 @@ func formatAPIResponse(statusCode int, headers http.Header, responseData string)
 }
 
 // Route wraps echo server into Lambda Handler
-func Route(e *echo.Echo) func(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	return func(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func Route(e *echo.Echo) func(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
+	return func(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
 		body := strings.NewReader(request.Body)
 		req := httptest.NewRequest(request.HTTPMethod, request.Path, body)
 		for k, v := range request.Headers {
