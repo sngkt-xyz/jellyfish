@@ -61,6 +61,7 @@ func Route(e *echo.Echo) func(request events.APIGatewayProxyRequest) (*events.AP
 
 		res := rec.Result()
 		responseBody, err := ioutil.ReadAll(res.Body)
+		fmt.Println(res)
 
 		if err != nil {
 			return formatAPIResponse(http.StatusInternalServerError, res.Header, err.Error())
