@@ -26,9 +26,10 @@ func formatAPIResponse(statusCode int, headers http.Header, responseData string)
 	responseHeaders["Access-Control-Allow-Headers"] = "origin,Accept,Authorization,Content-Type"
 
 	return &events.APIGatewayProxyResponse{
-		Body:       responseData,
-		Headers:    responseHeaders,
-		StatusCode: statusCode,
+		Body:            responseData,
+		Headers:         responseHeaders,
+		StatusCode:      statusCode,
+		IsBase64Encoded: false,
 	}, nil
 }
 
@@ -46,12 +47,13 @@ func Route(e *echo.Echo) func(request events.APIGatewayProxyRequest) (*events.AP
 			q.Add(k, v)
 		}
 		req.URL.RawQuery = q.Encode()
-
 		rec := httptest.NewRecorder()
+
 		e.ServeHTTP(rec, req)
 
 		res := rec.Result()
 		responseBody, err := ioutil.ReadAll(res.Body)
+
 		if err != nil {
 			return formatAPIResponse(http.StatusInternalServerError, res.Header, err.Error())
 		}
