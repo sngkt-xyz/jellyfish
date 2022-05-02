@@ -12,6 +12,7 @@ import (
 )
 
 func formatAPIResponse(statusCode int, headers http.Header, responseData string) (*events.APIGatewayProxyResponse, error) {
+	fmt.Println("some log 6")
 	responseHeaders := make(map[string]string)
 
 	responseHeaders["Content-Type"] = "application/json"
@@ -22,10 +23,12 @@ func formatAPIResponse(statusCode int, headers http.Header, responseData string)
 			responseHeaders[key] = value[0]
 		}
 	}
+	fmt.Println("some log 7")
 
 	responseHeaders["Access-Control-Allow-Origin"] = "*"
 	responseHeaders["Access-Control-Allow-Headers"] = "origin,Accept,Authorization,Content-Type"
 
+	fmt.Println("some log 8")
 	return &events.APIGatewayProxyResponse{
 		Body:       responseData,
 		Headers:    responseHeaders,
@@ -55,10 +58,13 @@ func Route(e *echo.Echo) func(request events.APIGatewayProxyRequest) (*events.AP
 		fmt.Println("some log 2")
 		res := rec.Result()
 		responseBody, err := ioutil.ReadAll(res.Body)
+		fmt.Println("some log 3")
 		if err != nil {
+			fmt.Println("some log 4")
 			return formatAPIResponse(http.StatusInternalServerError, res.Header, err.Error())
 		}
 
+		fmt.Println("some log 5")
 		return formatAPIResponse(res.StatusCode, res.Header, string(responseBody))
 	}
 }
